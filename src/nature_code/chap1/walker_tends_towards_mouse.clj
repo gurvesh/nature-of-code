@@ -28,7 +28,7 @@
                 theta)]
     (move-to-angular theta state)))
 
-(defn move-randomly [{:keys [x, y] :as state}]
+(defn move-randomly [state]
   (let [theta (q/random (* 2 (Math/PI)))]
     (move-to-angular theta state)))
 
