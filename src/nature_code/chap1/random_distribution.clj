@@ -2,11 +2,13 @@
   (:require [quil.core :as q]
             [quil.middleware :as m]))
 
+(def random-count 20)
+
 (defn setup []
   (q/background 255)
   (q/stroke 0)
   (q/fill 175)
-  {:random-counts (vec (repeat 20 0))})
+  {:random-counts (vec (repeat random-count 0))})
 
 (defn update-state [state]
   (let [index (->> state
@@ -19,8 +21,7 @@
 
 (defn draw [state]
   (doall
-   (let [random-count (count (:random-counts state))
-         w (/ (q/width)
+   (let [w (/ (q/width)
               random-count)]
      (map #(q/rect (* % w), (- (q/height) %2), (dec w), %2)
           (range random-count)
