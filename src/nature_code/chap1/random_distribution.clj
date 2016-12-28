@@ -22,9 +22,9 @@
    (let [random-count (count (:random-counts state))
          w (/ (q/width)
               random-count)]
-     (for [i (range random-count)]
-       (let [x (nth (:random-counts state) i)]
-         (q/rect (* i w), (- (q/height) x), (dec w), x))))))
+     (map #(q/rect (* % w), (- (q/height) %2), (dec w), %2)
+          (range random-count)
+          (:random-counts state)))))
 
 (q/defsketch example
   :setup setup
