@@ -11,11 +11,7 @@
   {:random-counts (vec (repeat random-count 0))})
 
 (defn update-state [state]
-  (let [index (->> state
-                   :random-counts
-                   count
-                   q/random
-                   int)]
+  (let [index (int (q/random random-count))]
     (update-in state [:random-counts]
                #(update % index inc))))
 
