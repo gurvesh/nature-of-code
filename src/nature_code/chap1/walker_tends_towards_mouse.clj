@@ -2,6 +2,8 @@
   (:require [quil.core :as q]
             [quil.middleware :as m]))
 
+(def pull-prob 0.50)
+
 (defn setup []
   (q/background 255)
   (q/stroke 0)
@@ -10,30 +12,29 @@
    :pull-to-x (q/width)
    :pull-to-y (q/height)})
 
+(defn move-to-angular [theta, {:keys [x, y] :as state}]
+  (let [new-x (+ x (Math/cos theta))
+        new-y (+ y (Math/sin theta))]
+    (-> state
+        (assoc :x new-x)
+        (assoc :y new-y))))
+
 (defn move-towards-pull [{:keys [x, y, pull-to-x, pull-to-y]
                           :as state}]
   (let [theta (Math/atan (/ (- pull-to-y, y)
                             (- pull-to-x, x)))
         theta (if (> x pull-to-x)
                 (+ (Math/PI) theta)
-                theta)
-        new-x (+ x (Math/cos theta))
-        new-y (+ y (Math/sin theta))]
-    (-> state
-        (assoc :x new-x)
-        (assoc :y new-y))))
+                theta)]
+    (move-to-angular theta state)))
 
 (defn move-randomly [{:keys [x, y] :as state}]
-  (let [theta (q/random (* 2 (Math/PI)))
-        new-x (+ x (Math/cos theta))
-        new-y (+ y (Math/sin theta))]
-    (-> state
-        (assoc :x new-x)
-        (assoc :y new-y))))
+  (let [theta (q/random (* 2 (Math/PI)))]
+    (move-to-angular theta state)))
 
 (defn step [state]
   (let [r (q/random 1)]
-    (if (< r 0.1)
+    (if (< r pull-prob)
       (move-towards-pull state)
       (move-randomly state))))
 
