@@ -2,7 +2,7 @@
   (:require [quil.core :as q]
             [quil.middleware :as m]))
 
-(def pull-prob 0.50)
+(def pull-prob 0.10)
 
 (defn setup []
   (q/background 255)
